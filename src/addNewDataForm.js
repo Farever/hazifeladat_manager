@@ -29,6 +29,7 @@ export default function addNewDataForm(props){
         <div>
             <form onSubmit={FormHandler}>
             <label for="tantarg">Tantárgy</label>
+            
             <br/>
             <select name="tantar" id="tantar" ref={tantargy}>
                 <option value="Magyar nyelv és irodalom">Magyar nyelv és irodalom</option>
@@ -39,6 +40,21 @@ export default function addNewDataForm(props){
                 <option value="Természettudomány">Természettudomány</option>
                 <option value="Szakmai tárgy">Szakmai tárgy</option>
             </select>
+            <br/>
+            <label for="temak">Témakor</label>
+            <input type="text" ref={temakor} />
+            <br/>
+            <label for="felad">Feladás napja</label>
+            <input type="date" ref={feladas} />
+            <br/>
+            <label for="hatar">Határidő dátuma</label>
+            <input type="date" ref={hatarido} />
+            <br/>
+            <label for="leir">Feladat bővebb leírása</label>
+            <input type="text" ref={leiras} />
+
+            <input type="date" ref={datum} />
+
             </form>
 
         </div>
