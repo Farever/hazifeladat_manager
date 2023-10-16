@@ -4,7 +4,15 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
-export default function Calendar(events) {
+export default function Calendar(props) {
+  var event = [];
+  {
+    props.data.map((data) => event.push({
+      title: data.tantargy + " , " + data.temakor,
+      date: data.hatarido
+    }))
+  }
+
   function handleDateClick(arg) {
     alert(arg.dateStr);
   }
@@ -20,9 +28,7 @@ export default function Calendar(events) {
           end: "dayGridMonth,timeGridWeek,timeGridDay", // will normally be on the right. if RTL, will be on the left
         }}
         weekends={false}
-        events={[
-          { title: 'event 1', date: '2023-10-16' }
-        ]}
+        events={event}
         dateClick={handleDateClick}
         height={"90vh"}
       />

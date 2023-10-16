@@ -1,10 +1,29 @@
 
 import './App.css';
-import Calendar from "./components/Calendar";
+import AddNewDataForm from "./components/AddNewDataForm"
+import DataList from "./components/DataList"
+import { useState, useEffect, useCallback } from "react";
+import Calendar from './components/Calendar';
 
 function App() {
-  const [Data, setData] = useState([]);
+  const [datas, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [newData, setNewData] = useState("");
+
+  function saveData(ujAdatok) {
+    fetch(
+      "https://react-test-b204e-default-rtdb.europe-west1.firebasedatabase.app/events.json",
+      {
+        method: "POST",
+        body: JSON.stringify(ujAdatok),
+        headers: { "Content-Type": "application/json" }
+      }
+    );
+    setData((prevData) => {
+      return [ujAdatok, ...prevData];
+    });
+  }
 
   const getEvents = useCallback(async () => {
     try {
@@ -12,29 +31,29 @@ function App() {
         "https://react-test-b204e-default-rtdb.europe-west1.firebasedatabase.app/events.json"
       );
       if (!response.ok) {
-        throw new Error("Valami nem jó");
+        throw new Error("Valami baj van");
       }
-
       const dataList = await response.json();
-
+      console.log(dataList);
       const list = [];
       for (const key in dataList) {
-        const locData = {
+        const aData = {
           id: key,
           ...dataList[key]
         };
-        list.push(locData);
+        list.push(aData);
       }
       setData(list);
+      console.log(datas);
       setIsLoading(false);
     } catch (error) {
+      setError(error.message);
       alert(error.message);
     }
-  });
-
+  }, []);
   useEffect(() => {
-    setTimeout(() => getEvents(), 500);
-  }, [getEvents, Data]);
+    setTimeout(() => getEvents(), 0);
+  }, [getEvents, newData]);
 
   if (isLoading) {
     return (
@@ -43,10 +62,11 @@ function App() {
       </section>
     );
   }
-
   return (
     <div className="App">
-      <Calendar />
+    <AddNewDataForm OnSaveHandler={saveData}/>
+    <DataList data={datas} />
+    <Calendar data = {datas} />
     </div>
   );
 }
