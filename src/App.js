@@ -11,7 +11,7 @@ function App() {
 
   function saveData(ujAdatok) {
     fetch(
-      "https://react-test-e956d-default-rtdb.europe-west1.firebasedatabase.app/nyaral.json",
+      "https://react-test-b204e-default-rtdb.europe-west1.firebasedatabase.app/events.json",
       {
         method: "POST",
         body: JSON.stringify(ujAdatok),
@@ -23,10 +23,10 @@ function App() {
     });
   }
 
-  const megye = useCallback(async () => {
+  const getEvents = useCallback(async () => {
     try {
       const response = await fetch(
-        "https://react-test-e956d-default-rtdb.europe-west1.firebasedatabase.app/nyaral.json"
+        "https://react-test-b204e-default-rtdb.europe-west1.firebasedatabase.app/events.json"
       );
       if (!response.ok) {
         throw new Error("Valami baj van");
@@ -50,8 +50,8 @@ function App() {
     }
   }, []);
   useEffect(() => {
-    setTimeout(() => megye(), 0);
-  }, [megye, newData]);
+    setTimeout(() => getEvents(), 0);
+  }, [getEvents, newData]);
 
   if (isLoading) {
     return (
@@ -62,7 +62,8 @@ function App() {
   }
   return (
     <div className="App">
-    <Feltolt/>
+    <Feltolt OnSaveHandler={saveData}/>
+    <DataList data={Data} />
     </div>
   );
 }
