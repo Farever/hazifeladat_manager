@@ -1,9 +1,13 @@
 
 import './App.css';
-import AddNewDataForm from "./components/AddNewDataForm"
-import DataList from "./components/DataList"
-import { useState, useEffect, useCallback } from "react";
+import Home from './components/Home';
+import Layout from './components/Layout';
+import AboutUs from './components/AboutUs';
 import Calendar from './components/Calendar';
+
+import { useState, useEffect, useCallback } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 
 function App() {
   const [datas, setData] = useState([]);
@@ -64,9 +68,18 @@ function App() {
   }
   return (
     <div className="App">
-    <AddNewDataForm OnSaveHandler={saveData}/>
-    <DataList data={datas} />
-    <Calendar data = {datas} />
+      {/*Az egész útvonaldefiniálás beletesszük a BrowseRouter beépíett kokponensbe*/}
+      <BrowserRouter>
+        {/*Útválasztóinkat a Routes-ban definiáljuk child tagekkét*/}
+        <Routes>
+          {/*A path segítségével állítjuk be, hogy milyen útvonalon jelenjen meg a komponsens. Figyeljék meg, hogy a / elemmel ellátott Route-ban van az többi, ami azt jelenti, hogy össze vannak kapcsolva. A /-rel ellátott komkponens mindig meg fog jelenni, és hozzá csatlakozik a többi, pl /contact, megjeleníti a kontaktot komponenst és a Layout komponenst is. AZ index az alapértelmezett megjelenésre szolgál a * pedig a nem létező útvonalakra készített komponenst jeleníti meg. */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home OnSaveHandler={saveData} data={datas} />} />
+            <Route path="calendar" element={<Calendar data = {datas}/>} />
+            <Route path="aboutus" element={<AboutUs />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     </div>
   );
 }
