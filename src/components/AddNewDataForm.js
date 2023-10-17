@@ -1,4 +1,8 @@
-import { useRef } from "react";
+import { useRef , useState} from "react";
+
+import Backdrop from "./Backdrop";
+import Modal from "./Modal";
+
 
 export default function AddNewDataForm(props) {
   const tantargy = useRef();
@@ -7,6 +11,14 @@ export default function AddNewDataForm(props) {
   const hatarido = useRef();
   const milyen = useRef();
   const leiras = useRef();
+
+  let date = new Date().toJSON().slice(0, 10);
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+
+
+  const [warningText, setWarningText] = useState("");
+
 
   function FormHandler(e) {
     e.preventDefault();
@@ -22,8 +34,18 @@ export default function AddNewDataForm(props) {
       milyen: milyen.current.value,
       leiras: leiras.current.value
     };
+    if (tantargy.current.value === "" || datum.current.value ==="" || temakor.current.value===""|| hatarido.current.value === ""|| milyen.current.value === "") 
+    {
+      setWarningText("Töltse ki a kötelező mezőket!");
+      setModalIsOpen(true);
+    }
+    else{
     props.OnSaveHandler(actualData);
+    }
   }
+  const closeModalHandler = () => {
+    setModalIsOpen(false);
+  };
 
   return (
     <div>
@@ -51,15 +73,21 @@ export default function AddNewDataForm(props) {
         <input type="text" ref={temakor} />
         <input type="date" ref={hatarido} />
 
-        <input type="radio" id="irasbeli" name="irasbeli" value="Írásbeli" ref={milyen}/>
+        <input type="radio" id="irasbeli" name="irasbeli" value="Írásbeli" ref={milyen} checked/>
         <label for="html">Írásbeli</label><br/>
         <input type="radio" id="szobeli" name="irasbeli" value="Szóbeli" ref={milyen}/>
         <label for="Szóbeli">Szóbeli</label><br/>
         
-        <label for = "leiras" >Leírás</label>
+        <label for = "leiras" >Leírás (nem kötelező) </label>
         <input type="text" ref={leiras} />
         <br/>
         <input type="submit" value="Felvesz" onClick={submitHandler} />
+
+        {modalIsOpen && <Backdrop onClick={closeModalHandler} />}
+        {modalIsOpen && (
+          <Modal warning={warningText} onClick={closeModalHandler} />
+        )}
+
       </form>
     </div>
   );
