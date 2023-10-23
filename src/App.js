@@ -38,7 +38,6 @@ function App() {
         throw new Error("Valami baj van");
       }
       const dataList = await response.json();
-      console.log(dataList);
       const list = [];
       for (const key in dataList) {
         const aData = {
@@ -47,6 +46,7 @@ function App() {
         };
         list.push(aData);
       }
+      list.sort((a,b) =>  new Date(a.hatarido).getTime() - new Date(b.hatarido).getTime());
       setData(list);
       console.log(datas);
       setIsLoading(false);
