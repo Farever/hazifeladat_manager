@@ -67,7 +67,7 @@ function App() {
     );
   }
   return (
-    <div className="App">
+    <>
       {/*Az egész útvonaldefiniálás beletesszük a BrowseRouter beépíett kokponensbe*/}
       <BrowserRouter>
         {/*Útválasztóinkat a Routes-ban definiáljuk child tagekkét*/}
@@ -80,7 +80,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </div>
+    </>
   );
 }
 
