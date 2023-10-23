@@ -6,12 +6,10 @@ import interactionPlugin from "@fullcalendar/interaction";
 
 export default function Calendar(props) {
   var event = [];
-  {
     props.data.map((data) => event.push({
       title: data.tantargy + " , " + data.temakor,
       date: data.hatarido
     }))
-  }
 
   function handleDateClick(arg) {
     alert(arg.dateStr);

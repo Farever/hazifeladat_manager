@@ -1,3 +1,4 @@
+import classes from "./AddNewDataForm.module.css"
 import { useRef , useState} from "react";
 
 import Backdrop from "./Backdrop";
@@ -5,21 +6,23 @@ import Modal from "./Modal";
 
 
 export default function AddNewDataForm(props) {
+  const [milyen, setMilyen] = useState();
   const tantargy = useRef();
   const datum = useRef();
   const temakor = useRef();
   const hatarido = useRef();
-  const milyen = useRef();
+  //const milyen = useRef();
   const leiras = useRef();
 
-  let date = new Date().toJSON().slice(0, 10);
+  //let date = new Date().toJSON().slice(0, 10);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
 
 
   const [warningText, setWarningText] = useState("");
 
-
+  const handleClick = radio => event => setMilyen(radio);
+  
   function FormHandler(e) {
     e.preventDefault();
   }
@@ -31,10 +34,11 @@ export default function AddNewDataForm(props) {
       datum: datum.current.value,
       temakor: temakor.current.value,
       hatarido: hatarido.current.value,
-      milyen: milyen.current.value,
-      leiras: leiras.current.value
+      milyen: milyen,
+      leiras: leiras.current.value,
+      done : false
     };
-    if (tantargy.current.value === "" || datum.current.value ==="" || temakor.current.value===""|| hatarido.current.value === ""|| milyen.current.value === "") 
+    if (tantargy.current.value === "" || datum.current.value ==="" || temakor.current.value===""|| hatarido.current.value === ""|| milyen === "") 
     {
       setWarningText("Töltse ki a kötelező mezőket!");
       setModalIsOpen(true);
@@ -48,10 +52,11 @@ export default function AddNewDataForm(props) {
   };
 
   return (
-    <div>
+    <div className={classes.cardBg}>
+      <h1 className={classes.cardHeader}>Új házifeladat</h1>
       <form onSubmit={FormHandler}>
-        <label for="tantargy">Tantárgy</label>
-        <label for = "datum" >Feladás dátuma</label>
+        <label for="tantargy" className={classes.cardText}>Tantárgy </label>
+        <label for = "datum" className={classes.cardText} >Feladás dátuma </label>
         <br/>
         <select name="tantargy" id="tantargy" ref={tantargy}>
           <option value="Matematika">Matematika</option>
@@ -62,26 +67,27 @@ export default function AddNewDataForm(props) {
           <option value="Testnevelés">Testnevelés</option>
           <option value="Szakmai">Szakmai</option>
         </select>
-
+        
         <input type="date" ref={datum} />
 
         <br/>
-        <label for = "temakor" >Témakör</label>
-        <label for = "hatarido" >Határidő</label>
+        <label for = "temakor" className={classes.cardText}>Témakör</label>
+        <label for = "hatarido" className={classes.cardText}>Határidő</label>
         <br/>
-
         <input type="text" ref={temakor} />
         <input type="date" ref={hatarido} />
 
-        <input type="radio" id="irasbeli" name="irasbeli" value="Írásbeli" ref={milyen} checked/>
-        <label for="html">Írásbeli</label><br/>
-        <input type="radio" id="szobeli" name="irasbeli" value="Szóbeli" ref={milyen}/>
-        <label for="Szóbeli">Szóbeli</label><br/>
-        
-        <label for = "leiras" >Leírás (nem kötelező) </label>
-        <input type="text" ref={leiras} />
+        <label for = "leiras" className={classes.cardText} id={classes.desc} >Leírás (nem kötelező) </label>
+        <input type="textarea" rows={"4"} cols={"40"} ref={leiras} id={classes.desc} />
         <br/>
-        <input type="submit" value="Felvesz" onClick={submitHandler} />
+        <input type="radio" id="irasbeli" name="milyen" value="Írásbeli" onClick={handleClick("Írásbeli")}/>
+        <label for="html">Írásbeli</label>
+        <input type="radio" id="szobeli" name="milyen" value="Szóbeli" onClick={handleClick("Szóbeli")}/>
+        <label for="Szóbeli">Szóbeli</label>
+        
+
+        <br/>
+        <input type="submit" className={classes.cardBtn} value="Felvesz" onClick={submitHandler} />
 
         {modalIsOpen && <Backdrop onClick={closeModalHandler} />}
         {modalIsOpen && (
